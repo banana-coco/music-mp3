@@ -1,13 +1,13 @@
 services:
   - type: web
-    name: mp3-url-tool
+    name: choco-music
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn main:app
+    startCommand: gunicorn --chdir src main:app
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: mp3-db
+          name: choco-db
           property: connectionString
       - key: SECRET_KEY
         generateValue: true
@@ -15,5 +15,5 @@ services:
         value: 3.11.10
 
 databases:
-  - name: mp3-db
+  - name: choco-db
     plan: free
