@@ -115,9 +115,9 @@
         {% endwith %}
 
         <div class="upload-card">
-            <h3>新しい曲を投稿する</h3>
+            <h3>新しい曲・動画を投稿する</h3>
             <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" accept=".mp3" required><br>
+                <input type="file" name="file" accept=".mp3,.mp4" required><br>
                 <button type="submit" class="btn btn-primary">アップロード</button>
             </form>
         </div>
@@ -130,9 +130,16 @@
                     <div class="music-title">{{ music.title }}</div>
                     <div class="music-date">{{ music.uploaded_at.strftime('%Y/%m/%d %H:%M') }}</div>
                 </div>
+                {% if music.filename.lower().endswith('.mp4') %}
+                <video controls style="width: 100%; border-radius: 8px;">
+                    <source src="{{ url_for('stream', music_id=music.id) }}" type="video/mp4">
+                    ブラウザが動画再生に対応していません。
+                </video>
+                {% else %}
                 <audio controls>
                     <source src="{{ url_for('stream', music_id=music.id) }}" type="audio/mpeg">
                 </audio>
+                {% endif %}
                 <div class="card-actions">
                     <a href="{{ url_for('download', music_id=music.id) }}" class="btn btn-download">保存する</a>
                     <form action="{{ url_for('delete', music_id=music.id) }}" method="post" style="display: flex; gap: 5px;">
